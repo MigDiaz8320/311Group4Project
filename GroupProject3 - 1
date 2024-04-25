@@ -1,3 +1,4 @@
+drop schema if exists GroupFourProject;
 create schema GroupFourProject;
 
 use GroupFourProject;
@@ -39,26 +40,30 @@ CREATE TABLE Gate
 CREATE TABLE Employee
 (
 	employee_ID INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
     flight_num INT,
     role VARCHAR(50),
-    FOREIGN KEY (flight_num) REFERENCES Flight(flight_num)
+    FOREIGN KEY (flight_num) REFERENCES Flight(flight_num) ON DELETE SET NULL
 );
 
 CREATE TABLE Ticket
 (
 	ticket_num INT PRIMARY KEY,
     flight_num INT,
-    FOREIGN KEY (flight_num) REFERENCES Flight(flight_num)
+    FOREIGN KEY (flight_num) REFERENCES Flight(flight_num) ON DELETE CASCADE
 );
 
 CREATE TABLE Passenger
 (
 	passenger_ID INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
     ticket_num INT,
     num_bags INT,
     seat_num INT,
     checked_in BOOL,
-    FOREIGN KEY (ticket_num) REFERENCES Ticket(ticket_num) 
+    FOREIGN KEY (ticket_num) REFERENCES Ticket(ticket_num) ON DELETE CASCADE
 );
 
 INSERT INTO Airline (airline_name, num_employees, num_gates, num_airplane)
@@ -94,13 +99,13 @@ VALUES
     (04, 4),
     (05, 5);
 
-INSERT INTO Employee (employee_ID, flight_num, role)
+INSERT INTO Employee (employee_ID, first_name, last_name, flight_num, role)
 VALUES
-	(100101, 1, "Flight Attendent"),
-    (000201, 5, "Pilot"),
-    (102001, 2, "Co-Pilot"),
-    (00101, 4, "Flight Attendent"),
-    (010101, 3, "Co-Pilot");
+	(100101, "John", "Doe", 1, "Flight Attendent"),
+    (000201, "Jane", "Doe", 5, "Pilot"),
+    (102001, "Taylor", "Swift", 2, "Co-Pilot"),
+    (00101, "Metro", "State", 4, "Flight Attendent"),
+    (010101, "Satoru", "Gojo", 3, "Co-Pilot");
     
 INSERT INTO Ticket(ticket_num, flight_num)
 VALUES
@@ -110,22 +115,10 @@ VALUES
     (004, 3),
     (005, 4);
     
-INSERT INTO Passenger(passenger_ID, ticket_num, num_bags, seat_num, checked_in)
+INSERT INTO Passenger(passenger_ID, first_name, last_name, ticket_num, num_bags, seat_num, checked_in)
 VALUES
-	(12, 001, 2, 01, FALSE),
-    (23, 002, 3, 01, TRUE),
-    (32, 003, 2, 02, TRUE),
-    (41, 004, 5, 01, FALSE),
-    (51, 005, 3, 01, TRUE);
-    
-
-SELECT passenger_ID FROM Passenger WHERE checked_in = FALSE;
-
-SELECT passenger_ID, ticket_num FROM Passenger WHERE num_bags > 2;
-
-SELECT employee_ID, role, Flight.flight_num FROM Employee INNER JOIN Flight ON Employee.flight_num = Flight.Flight_num ORDER BY Flight.flight_num;
-
-SELECT Flight.flight_num, Airplane.airline_name, Gate.gate_ID, Flight.depart_time, Flight.arrival_time FROM Airplane 
-INNER JOIN Flight ON Airplane.airplane_ID = Flight.airplane_ID INNER JOIN Gate ON Flight.flight_num = Gate.flight_num ORDER BY depart_time;
-
-SELECT Airplane.model, Airplane.capacity FROM Airplane ORDER BY capacity;
+	(12, "John", "Doe", 001, 2, 01, FALSE),
+    (23, "Jane", "Doe", 002, 3, 01, TRUE),
+    (32, "League", "Legend", 003, 2, 02, TRUE),
+    (41, "My", "Sql", 004, 5, 01, FALSE),
+    (51, "Java", "Script", 005, 3, 01, TRUE);
