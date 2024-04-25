@@ -28,7 +28,7 @@ public class EmployeeGUI extends javax.swing.JFrame {
          try {
                     Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/groupfourproject", "root","sasha7163");
                     Statement sta = connection.createStatement();
-                    String query = "select distinct Employee.flight_num from Employee, Flight order by Employee.flight_num";
+                    String query = "select flight_num from Flight order by flight_num";
                     ResultSet rs = sta.executeQuery(query);
                     flightID.addItem(null);
                     while (rs.next()) {
